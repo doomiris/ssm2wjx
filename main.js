@@ -9,7 +9,8 @@ engines.all().slice(1).forEach(script => {
 const cle = function(e){
     let eb = e.bounds();
     click(eb.centerX(),eb.centerY());
-}
+};
+const myname="OK"; //修改此真实姓名(孩子的);
 const ctt=['35.9','36.0','36.1','36.2','36.3','36.4','36.5','36.6','36.7','36.8'];
 Date.prototype.Format = function(fmt){ //author: meizz
     var o = {
@@ -36,25 +37,27 @@ let main = function(){
     click_item('防疫健康码');
     click_item('查看防疫健康码');
     click_item('亲属随申码');
-    wait_for('兰玥的随申码');
+    wait_for(myname + '的随申码');
     let e=text('查看').findOnce(1);
     cle(e);
     wait_for('更新于');
     captureScreen(capimg);
     sleep(1000);
-    start_app(subaction, '微信', '截图上传到问卷星', false, true);
+    start_app(subaction, '微信', '把截图上传到问卷星', false, true);
 };
 let subaction = function(){
     sleep(3000);
     id('cns').text('我').findOne().parent().parent().click();
     click_item('收藏');
+    while (!has_text('政海幼儿园幼儿每日健康随申码收集表')){
+        swipe_up();        
+    }
     click_item('政海幼儿园幼儿每日健康随申码收集表');
-    //let ddd = new Date().Format("yyyy-MM-dd");
     sleep(7*1000);
     click_item('请选择日期',[250,125]);
     wait_for('确定');
     click_item('确定');
-    input(1,'兰玥');
+    input(1,myname);
     input(2,ctt[random(0,9)]);
     while (!has_text('上海')){
         swipe_up();
@@ -79,7 +82,7 @@ let subaction = function(){
     }
     click_item('提交');
 };
-start_app(main, '微信', '查找兰玥随申码并截图', false, true);
+start_app(main, '微信', '查找' + myname + '的随申码并截图', false, true);
 
 //start_app(subaction, '微信', '截图上传到问卷星', false, true);
 
