@@ -1,0 +1,10 @@
+{
+    "name": "随申码上传问卷星",
+    "main": "main.js",
+    "ignore": [
+        "build"
+    ],
+    "packageName": "com.domisoft.ssm2wjx",
+    "versionName": "1.0.0",
+    "versionCode": 1
+}
