@@ -1,8 +1,8 @@
-let { start_app, click_item, has_text, wait_for,set_runing_tip,swipe_down,swipe_up } = require("libsdk.js");
+let { start_app, click_item, has_text, wait_for, set_runing_tip, swipe_down,swipe_up } = require('libsdk.js');
 // 检查脚本是否重复运行
 engines.all().slice(1).forEach(script => {
   if (script.getSource().getName().indexOf(engines.myEngine().getSource())) {
-    set_runing_tip("脚本正在运行中");
+    set_runing_tip('脚本正在运行中');
     engines.myEngine().forceStop();
   }
 });
@@ -10,25 +10,8 @@ const cle = function(e){
     let eb = e.bounds();
     click(eb.centerX(),eb.centerY());
 };
-const myname="OK"; //修改此真实姓名(孩子的);
+const myname='OK'; //修改此真实姓名(孩子的)
 const ctt=['35.9','36.0','36.1','36.2','36.3','36.4','36.5','36.6','36.7','36.8'];
-Date.prototype.Format = function(fmt){ //author: meizz
-    var o = {
-        "M+" : this.getMonth()+1, //月份
-        "d+" : this.getDate(), //日
-        "h+" : this.getHours(), //小时
-        "m+" : this.getMinutes(), //分
-        "s+" : this.getSeconds(), //秒
-        "q+" : Math.floor((this.getMonth()+3)/3), //季度
-        "S" : this.getMilliseconds() //毫秒
-    };
-    if(/(y+)/.test(fmt))
-        fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));
-    for(var k in o)
-        if(new RegExp("("+ k +")").test(fmt))
-            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
-    return fmt;
-}
 const capimg = '/storage/emulated/0/脚本/随申码上传问卷星/temp/screencapture.png';
 let main = function(){
     sleep(3000);
@@ -74,9 +57,14 @@ let subaction = function(){
     }
     click_item('随申码上传问卷星');
     click_item('temp');
+    if (!has_text('screencapture.png')){
+      warn('没找到截图!');
+      engines.myEngine().forceStop();
+    }
     click_item('screencapture.png');
     click_item('确定');
     wait_for('上传成功');
+    files.remove(capimg);
     while (!has_text('提交')){
         swipe_up();
     }
@@ -84,5 +72,4 @@ let subaction = function(){
 };
 start_app(main, '微信', '查找' + myname + '的随申码并截图', false, true);
 
-//start_app(subaction, '微信', '截图上传到问卷星', false, true);
 
