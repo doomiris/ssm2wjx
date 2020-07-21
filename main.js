@@ -1,4 +1,4 @@
-let { start_app, click_item, has_text, wait_for, swipe_down, swipe_up } = require('autojs_sdk.js');
+let { start_app, click_item, has_text, wait_for, swipe_down, swipe_up, set_runing_tip, get_date, get_month } = require('autojs_sdk.js');
 // 检查脚本是否重复运行
 engines.all().slice(1).forEach(script => {
   if (script.getSource().getName().indexOf(engines.myEngine().getSource())) {
@@ -29,7 +29,8 @@ console.log(capimg);
 
 if (files.exists(capimg)) {
     toastLog('今天已经上传了');
-    exit();
+    sleep(5000);
+//    exit();
 }
 const cle = (e) => {
     let eb = e.bounds();
@@ -47,13 +48,14 @@ let main = function(){
     id('cns').text('微信').findOne().parent().parent().click();
     swipe_down();
     sleep(2000);
-    id('gam').text('随申办').findOne().parent().click();
+    depth(22).className('android.widget.TextView').text('随申办').findOne().parent().click();
     className('android.view.View').text('随申码').findOne().click()
     className('android.view.View').text('亲属随申码').findOne().click()
     className('android.view.View').text(myname + '的随申码').waitFor()
     let e = text('查看').findOnce( 0 + 1 );
     cle(e);
     className('android.view.View').text('绿色').depth(22).waitFor();
+    set_runing_tip('');
     sleep(1000);
     captureScreen(capimg);
     sleep(100);
@@ -71,6 +73,7 @@ let main_bak = function(){
     let e = text('查看').findOnce( 0 + 1 );
     cle(e);
     wait_for('绿色');
+    set_runing_tip('');
     sleep(1000);
     captureScreen(capimg);
     sleep(100);
@@ -89,11 +92,16 @@ let lmain = function(){
     click_item('确定');
     input(1,myname); 
     input(2,ctt);
-    swipe_to_click('上海');
+    if (get_month()==7 && get_date()<25) {
+        swipe_to_click('其他');
+        input(3,'吉林省蛟河市');
+    }else{
+        swipe_to_click('上海');
+    }  
     click_item('选择文件');
     click_item('文件管理');
-    swipe_to_click('脚本');
-    swipe_to_click('随申码上传问卷星',true);
+    click_item('脚本');
+    click_item('随申码上传问卷星');
     click_item('temp');
     if (!has_text(files.getName(capimg))){
       toastLog('没找到截图!');
